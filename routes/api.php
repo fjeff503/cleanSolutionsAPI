@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BuildingController;
+use App\Http\Controllers\RoleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +15,9 @@ use App\Http\Controllers\BuildingController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+/*---ROLE---*/
+Route::get('/role/select', [RoleController::class, 'selectRoles']);
+
 /*---BUILDING---*/
 Route::get('/building/find/{id}', [BuildingController::class, 'findBuilding']);
 Route::get('/building/select', [BuildingController::class, 'selectBuildings']);
