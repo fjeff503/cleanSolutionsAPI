@@ -16,7 +16,7 @@ class BuildingController extends Controller
         try {
             // Buscar el registro de edificio por ID
             $registro = Building::find($id);
-    
+
             // Si el registro no existe, retornar un error 404
             if (!$registro) {
                 return response()->json([
@@ -24,14 +24,13 @@ class BuildingController extends Controller
                     'message' => 'Edificio no encontrado'
                 ], 404);
             }
-    
+
             // Retornar una respuesta JSON con el registro encontrado
             return response()->json([
                 'code' => 200,
                 'message' => 'Edificio encontrado',
                 'data' => $registro
             ], 200);
-    
         } catch (\Exception $e) {
             // Manejar cualquier excepción que pueda ocurrir
             return response()->json([
@@ -41,15 +40,15 @@ class BuildingController extends Controller
             ], 500);
         }
     }
-    
+
 
     //recuperar todos los registros
-    public function selectBuildings() 
+    public function selectBuildings()
     {
         try {
             // Recuperar todos los registros de la tabla buildings
             $data = Building::all();
-    
+
             // Verificar si hay registros
             if ($data->isEmpty()) {
                 return response()->json([
@@ -57,13 +56,12 @@ class BuildingController extends Controller
                     'data' => 'No hay registros'
                 ], 404);
             }
-    
+
             // Si hay registros, devolverlos con un código 200
             return response()->json([
                 'code' => 200,
                 'data' => $data
             ], 200);
-    
         } catch (\Exception $e) {
             // Manejar cualquier excepción que ocurra durante la consulta
             return response()->json([
@@ -83,7 +81,7 @@ class BuildingController extends Controller
                 'address' => 'required',
                 'description' => 'sometimes' // 'sometimes' significa que el campo es opcional
             ]);
-    
+
             // Si la validación falla, retornar mensajes de error
             if ($validacion->fails()) {
                 return response()->json([
@@ -92,10 +90,10 @@ class BuildingController extends Controller
                     'errors' => $validacion->messages()
                 ], 400);
             }
-    
+
             // Verificar si el registro existe en la base de datos, incluyendo los eliminados lógicamente
             $registro = Building::withTrashed()->where('name', $request->name)->first();
-    
+
             if ($registro) {
                 if ($registro->trashed()) {
                     // Si el registro está eliminado lógicamente, restaurarlo
@@ -114,17 +112,16 @@ class BuildingController extends Controller
                     ], 400);
                 }
             }
-    
+
             // Si el registro no existe, insertar el nuevo registro
             $nuevoRegistro = Building::create($request->all());
-    
+
             // Retornar una respuesta JSON indicando éxito
             return response()->json([
                 'code' => 200,
                 'message' => 'Edificio insertado correctamente',
                 'data' => $nuevoRegistro
             ], 200);
-    
         } catch (\Exception $e) {
             // Manejar cualquier excepción que pueda ocurrir
             return response()->json([
@@ -134,8 +131,8 @@ class BuildingController extends Controller
             ], 500);
         }
     }
-    
-    
+
+
     //actualizar un registro
     public function updateBuilding(Request $request, $id)
     {
@@ -146,7 +143,7 @@ class BuildingController extends Controller
                 'address' => 'required',
                 'description' => 'sometimes' // 'sometimes' significa que el campo es opcional
             ]);
-    
+
             // Si la validación falla, retornar mensajes de error
             if ($validacion->fails()) {
                 return response()->json([
@@ -155,10 +152,10 @@ class BuildingController extends Controller
                     'errors' => $validacion->messages()
                 ], 400);
             }
-    
+
             // Buscar el registro de edificio por ID
             $registro = Building::find($id);
-    
+
             // Si el registro no existe, retornar un error 404
             if (!$registro) {
                 return response()->json([
@@ -166,7 +163,7 @@ class BuildingController extends Controller
                     'message' => 'Edificio no encontrado'
                 ], 404);
             }
-    
+
             // Verificar si el nuevo nombre ya existe en otro registro
             $otroRegistro = Building::withTrashed()->where('name', $request->name)->where('idBuilding', '!=', $id)->first();
             if ($otroRegistro) {
@@ -176,21 +173,20 @@ class BuildingController extends Controller
                     'errors' => ['name' => ['El nombre del edificio ya existe']]
                 ], 400);
             }
-    
+
             // Actualizar el registro con los datos recibidos
             $registro->update([
                 'name' => $request->name,
                 'address' => $request->address,
                 'description' => $request->description
             ]);
-    
+
             // Retornar una respuesta JSON indicando éxito
             return response()->json([
                 'code' => 200,
                 'message' => 'Edificio actualizado correctamente',
                 'data' => $registro
             ], 200);
-    
         } catch (\Exception $e) {
             // Manejar cualquier excepción que pueda ocurrir
             return response()->json([
@@ -200,19 +196,19 @@ class BuildingController extends Controller
             ], 500);
         }
     }
-    
-    
+
+
     //eliminar un registro
     public function deleteBuilding($id)
     {
         try {
             // Se busca el edificio por ID
             $data = Building::find($id);
-    
+
             if ($data) {
                 // Si el edificio existe, se elimina
                 $data->delete();
-    
+
                 // Se retorna una respuesta en formato JSON indicando éxito
                 return response()->json([
                     'code' => 200,
@@ -234,7 +230,4 @@ class BuildingController extends Controller
             ], 500);
         }
     }
-    
-        
-    
 }
