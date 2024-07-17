@@ -7,6 +7,7 @@ use App\Models\Building;
 use App\Models\Level;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class LevelController extends Controller
 {
@@ -37,6 +38,36 @@ class LevelController extends Controller
                 'code' => 500,
                 'message' => 'Ha ocurrido un error al procesar la solicitud',
                 'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    // Recuperar niveles por edificio
+    public function selectLevelsForBuilding($idBuilding)
+    {
+        try {
+            // Recuperar todos los niveles del edificio específico
+            $levels = Level::where('idBuilding', $idBuilding)->get();
+
+            // Verificar si hay registros
+            if ($levels->isEmpty()) {
+                return response()->json([
+                    'code' => 404,
+                    'message' => 'No hay registros de niveles para este edificio'
+                ], 404);
+            }
+
+            // Si hay registros, devolverlos con un código 200
+            return response()->json([
+                'code' => 200,
+                'message' => 'Registros de niveles recuperados correctamente',
+                'data' => $levels
+            ], 200);
+        } catch (\Exception $e) {
+            // Manejar cualquier excepción que ocurra durante la consulta
+            return response()->json([
+                'code' => 500,
+                'message' => 'Error al recuperar los datos de niveles: ' . $e->getMessage()
             ], 500);
         }
     }

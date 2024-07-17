@@ -37,6 +37,5 @@ class Room extends Model
     public function level()
     {
         return $this->belongsTo(Level::class);
-    }    
-    
+    }
 }

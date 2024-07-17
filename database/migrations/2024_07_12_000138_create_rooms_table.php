@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('rooms', function (Blueprint $table) {
             $table->id('idRoom');
-            $table->string('name')->unique();
+            $table->string('name');
             $table->string('description')->nullable();
-            $table->dateTime('lastCleaning')->require();
-
+            $table->dateTime('lastCleaning');
+            //hacer name unico pero en cada level
+            $table->unique(['name', 'idLevel']);
             //relacion level
             $table->unsignedBigInteger('idLevel');
             $table->foreign('idLevel')->references('idLevel')->on('levels')->onUpdate('cascade');

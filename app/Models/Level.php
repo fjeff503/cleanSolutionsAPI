@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Level extends Model
 {
     use HasFactory;
-    
+
     //para eliminado logico
     use SoftDeletes;
 
